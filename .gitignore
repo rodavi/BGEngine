@@ -1,0 +1,23 @@
+# Directorios de compilación
+build/
+build_debug/
+build_release/
+
+# Archivos de caché y temporales de CMake
+**/CMakeCache.txt
+**/CMakeFiles/
+**/cmake_install.cmake
+**/install_manifest.txt
+
+# Pruebas y empaquetado
+**/CTestTestfile.cmake
+**/CPackConfig.cmake
+
+# Configuraciones de usuario local
+CMakeUserPresets.json
+
+# Metadatos para herramientas de análisis
+compile_commands.json
+
+# Otros (Archivos de estado de UI)
+imgui.ini
