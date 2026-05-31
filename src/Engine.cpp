@@ -12,14 +12,14 @@ Engine::~Engine()
     cleanup();
 }
 
-bool Engine::init() 
+bool Engine::init(const char* title, int width, int height) 
 {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cerr << "Error al inicializar SDL: " << SDL_GetError() << std::endl;
         return false;
     }
 
-    m_pWindow = SDL_CreateWindow("BGEngine", 800, 600, SDL_WINDOW_RESIZABLE);
+    m_pWindow = SDL_CreateWindow(title, width, height, SDL_WINDOW_RESIZABLE);
     if (!m_pWindow) {
         std::cerr << "Error al crear la ventana: " << SDL_GetError() << std::endl;
         SDL_Quit();
@@ -74,7 +74,9 @@ void Engine::render()
 
     // 3. Espacio para la lógica de dibujado de objetos (Fase 4 y 6)
     // Aquí es donde en el futuro llamarás a las funciones de renderizado de tus piezas o tablero.
-
+    SDL_FRect rect = {100.0f, 100.0f, 200.0f, 200.0f};
+    SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(m_pRenderer, &rect);
     // 4. Presentar el contenido en pantalla
     // SDL_RenderPresent realiza el intercambio de buffers (Double Buffering), 
     // lo que evita el parpadeo visual al mostrar el frame completo de una vez [1, 2].
@@ -93,6 +95,7 @@ void Engine::cleanup()
         m_pWindow = nullptr;
     }
     SDL_Quit();
+    SDL_Log("BGEngine: Limpieza completada con éxito.");
 }
 
 void Engine::run() {

@@ -22,14 +22,18 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SDL3)
 
-# Definir el ejecutable principal [12, 13]
-add_executable(BGEngine 
-    src/main.cpp
-    src/Engine.cpp
-)
+# 1. Definir la librería del motor (con tus archivos de lógica)
+add_library(BGEngineLib STATIC src/Engine.cpp) 
+target_include_directories(BGEngineLib PUBLIC include)
+target_link_libraries(BGEngineLib PUBLIC SDL3::SDL3)
 
-# Configurar directorios de inclusión [14]
-target_include_directories(BGEngine PRIVATE include)
+# 2. El ejecutable principal ahora es solo un "wrapper"
+add_executable(BGEngine src/main.cpp)
+target_link_libraries(BGEngine PRIVATE BGEngineLib)
 
-# Enlazar el objetivo BGEngine con SDL3::SDL3
-target_link_libraries(BGEngine PRIVATE SDL3::SDL3)
+# CTest para agregar pruebas
+enable_testing()
+add_executable(test_init tests/test_init.cpp)
+target_link_libraries(test_init PRIVATE BGEngineLib)
+
+add_test(NAME EngineInitTest COMMAND test_init)

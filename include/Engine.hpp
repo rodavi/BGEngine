@@ -7,7 +7,7 @@ class Engine {
 public:
     Engine();
     ~Engine();
-    bool init();
+    bool init(const char* title, int width, int height);
     void handleEvents();
     void update();
     void render();

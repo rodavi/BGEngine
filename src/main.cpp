@@ -5,7 +5,7 @@ int main(int argc, char* argv[]) {
     std::cout << "BGEngine: Iniciando cimientos..." << std::endl;
 
     Engine engine;
-    if (!engine.init()) {
+    if (!engine.init("BGEngine", 800, 600)) {
         std::cerr << "Error al inicializar el motor" << std::endl;
         return 1;
     }
