@@ -1,6 +1,9 @@
+#pragma once
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <iostream>
+#include <vector>
+#include "GameObjectManager.hpp"
 
 class Engine {
 
@@ -23,4 +26,6 @@ private:
 
     const double MS_PER_UPDATE = 16.666; // 60 FPS fijos para la lógica [3]
     
+    GameObjectManager m_gameObjectManager;
+
 };
