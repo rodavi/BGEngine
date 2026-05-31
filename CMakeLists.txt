@@ -12,8 +12,24 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(FATAL_ERROR "In-source builds no están permitidos. Crea una carpeta 'build'.")
 endif()
 
+# Agregar FetchContent para SDL3
+include(FetchContent)
+
+FetchContent_Declare(
+    SDL3
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(SDL3)
+
 # Definir el ejecutable principal [12, 13]
-add_executable(BGEngine src/main.cpp)
+add_executable(BGEngine 
+    src/main.cpp
+    src/Engine.cpp
+)
 
 # Configurar directorios de inclusión [14]
 target_include_directories(BGEngine PRIVATE include)
+
+# Enlazar el objetivo BGEngine con SDL3::SDL3
+target_link_libraries(BGEngine PRIVATE SDL3::SDL3)
