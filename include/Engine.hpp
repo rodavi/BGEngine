@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "GameObjectManager.hpp"
+#include "TextureManager.hpp"
 
 class Engine {
 
@@ -27,5 +28,4 @@ private:
     const double MS_PER_UPDATE = 16.666; // 60 FPS fijos para la lógica [3]
     
     GameObjectManager m_gameObjectManager;
-
 };

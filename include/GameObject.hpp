@@ -1,12 +1,18 @@
 #pragma once
+#include "LoaderParams.hpp"
+#include "utils.hpp"
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3/SDL_surface.h>
+#include <SDL3_image/SDL_image.h>
 
 class GameObject {
 public:
-    virtual void draw()=0;
+    virtual void draw(SDL_Renderer* pRenderer)=0;
     virtual void update(double dt)=0;
     virtual void render(double alpha)=0;
 
-    int getId() const { return m_id; }
+    std::string getId() const { return m_id; }
     bool isDead() const { return m_isDead; }
     void markAsDead() { m_isDead = true; }
     
@@ -14,11 +20,11 @@ public:
     virtual ~GameObject() {} 
 
 protected:
-    GameObject(int id) : m_id(id) {}
+    GameObject(const LoaderParams* pParams) : m_id(pParams->getTextureID()), m_isDead(false) {}
 
 private:
     // Atributos del objeto
-    int m_id; // Identificador único del objeto
+    std::string m_id; // Identificador único del objeto
     bool m_isDead = false; // Estado de vida del objeto
     // Otros atributos...
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine.hpp"
+#include "Player.hpp"
 
 Engine::Engine() : m_pWindow(nullptr), m_pRenderer(nullptr), m_bIsRunning(false) 
 {
@@ -35,6 +36,15 @@ bool Engine::init(const char* title, int width, int height)
     }
 
     m_bIsRunning = true;
+
+    // Inicialización de texturas u otros recursos puede ir aquí (Fase 3)
+    if(!TheTextureManager::Instance()->load("assets/AnimatedAstronout.png", "astronaut", m_pRenderer)) { // Ejemplo de carga de textura [6]
+        std::cerr << "Error al cargar la textura: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    LoaderParams params = LoaderParams(100, 100, 64, 64, "astronaut", 8); // Parámetros para el jugador (ID, x, y, width, height, numFrames)
+    m_gameObjectManager.addEntity(new Player(&params)); // Agrega un jugador al manager
+
     return true;
 }
 
@@ -60,27 +70,16 @@ void Engine::handleEvents() {
 void Engine::update() 
 {
     // Aquí se actualizará la lógica del juego en el futuro
+    m_gameObjectManager.update(0.5); // Actualiza todos los objetos del juego (pasando un delta fijo por ahora)
 }
 
 void Engine::render() 
 {
-    // 1. Establecer el color con el que se limpiará la pantalla (por ejemplo, negro)
-    // Nota: En SDL3, SDL_SetRenderDrawColor ahora devuelve un bool para indicar éxito [3, 4].
-    SDL_SetRenderDrawColor(m_pRenderer, 0, 200, 100, 255);
-
-    // 2. Limpiar el renderizador (Back Buffer) con el color seleccionado
-    // Esto borra lo que se dibujó en el frame anterior [4, 5].
     SDL_RenderClear(m_pRenderer);
 
-    // 3. Espacio para la lógica de dibujado de objetos (Fase 4 y 6)
-    // Aquí es donde en el futuro llamarás a las funciones de renderizado de tus piezas o tablero.
-    SDL_FRect rect = {100.0f, 100.0f, 200.0f, 200.0f};
-    SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
-    SDL_RenderFillRect(m_pRenderer, &rect);
-    // 4. Presentar el contenido en pantalla
-    // SDL_RenderPresent realiza el intercambio de buffers (Double Buffering), 
-    // lo que evita el parpadeo visual al mostrar el frame completo de una vez [1, 2].
-    // En SDL3, esta función también devuelve un bool [4].
+    // El Engine entrega su m_pRenderer al manager
+    m_gameObjectManager.draw(m_pRenderer); 
+
     SDL_RenderPresent(m_pRenderer);
 }
 
@@ -120,9 +119,9 @@ void Engine::run() {
 
         // 3. Renderizar (frecuencia variable) [9-11]
         // Opcionalmente puedes pasar 'lag / MS_PER_UPDATE' para interpolación [12]
-        render(); 
-    }
+        render();
 
+    }
     cleanup(); // Limpieza al salir [13]
 }
 

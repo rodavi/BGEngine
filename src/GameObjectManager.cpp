@@ -1,5 +1,6 @@
 #include "GameObjectManager.hpp"
 #include <algorithm>
+#include <iostream>
 
 void GameObjectManager::update(double dt) {
     // Fase 1: Actualizar solo los objetos vivos
@@ -27,6 +28,17 @@ void GameObjectManager::render(double alpha) {
     }
 }
 
+void GameObjectManager::draw(SDL_Renderer* pRenderer) {
+    //std::cout << "GameObjectManager: Dibujando " << m_gameObjects.size() << " objetos." << std::endl; // Debug de cantidad de objetos
+    for (GameObject* pEntity : m_gameObjects) {
+       // std::cout << "GameObjectManager: Procesando objeto con ID: " << pEntity->getId() << std::endl; // Debug de ID de objeto
+        if (!pEntity->isDead()) {
+            //std::cout << "GameObjectManager: Dibujando objeto con ID: " << pEntity->getId() << std::endl; // Debug de ID de objeto
+            pEntity->draw(pRenderer); // Se inyecta en la iteración
+        }
+    }
+}
+
 void GameObjectManager::addEntity(GameObject* pEntity) {
     m_gameObjects.push_back(pEntity);
 }
@@ -41,7 +53,7 @@ void GameObjectManager::clearObjects() {
     m_gameObjects.clear();
 }
 
-GameObject* GameObjectManager::findEntityById(int id) {
+GameObject* GameObjectManager::findEntityById(std::string id) {
     for (auto& obj : m_gameObjects) {
         if (obj->getId() == id) {
             return obj;

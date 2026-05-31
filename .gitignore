@@ -2,7 +2,8 @@
 build/
 build_debug/
 build_release/
-
+assets/
+cmake/
 # Archivos de caché y temporales de CMake
 **/CMakeCache.txt
 **/CMakeFiles/

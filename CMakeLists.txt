@@ -22,14 +22,36 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SDL3)
 
+FetchContent_Declare(
+    SDL3_image
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(SDL3_image)
+
 # 1. Definir la librería del motor (con tus archivos de lógica)
-add_library(BGEngineLib STATIC src/Engine.cpp) 
+add_library(BGEngineLib 
+    STATIC 
+        src/Engine.cpp
+        src/GameObjectManager.cpp
+        src/TextureManager.cpp
+        src/Player.cpp
+        src/SDLGameObject.cpp
+        ) 
 target_include_directories(BGEngineLib PUBLIC include)
-target_link_libraries(BGEngineLib PUBLIC SDL3::SDL3)
+target_link_libraries(BGEngineLib PUBLIC SDL3::SDL3 SDL3_image::SDL3_image)
 
 # 2. El ejecutable principal ahora es solo un "wrapper"
 add_executable(BGEngine src/main.cpp)
 target_link_libraries(BGEngine PRIVATE BGEngineLib)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+    "${CMAKE_CURRENT_BINARY_DIR}/assets"
+    COMMENT "Copiando carpeta de assets al directorio de salida..."
+    VERBATIM
+)
 
 # CTest para agregar pruebas
 enable_testing()
@@ -37,3 +59,7 @@ add_executable(test_init tests/test_init.cpp)
 target_link_libraries(test_init PRIVATE BGEngineLib)
 
 add_test(NAME EngineInitTest COMMAND test_init)
+
+include(cmake/Valgrind.cmake)
+
+AddValgrind(BGEngine)
