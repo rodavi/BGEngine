@@ -24,7 +24,9 @@ public:
 
     // Libera una textura específica de la memoria [8, 9]
     void clearFromTextureMap(std::string id);
-
+    
+    void drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, 
+                  int currentRow, int currentFrame, SDL_Renderer* pRenderer);
 private:
     TextureManager() {} // Constructor privado para el Singleton [2]
     static TextureManager* s_pInstance;

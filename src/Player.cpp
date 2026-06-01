@@ -1,8 +1,14 @@
 #include "Player.hpp"
 #include <iostream>
 
-Player::Player(const LoaderParams *pParams) : SDLGameObject(pParams) 
+Player::Player() : SDLGameObject() 
 {}
+
+void Player::load(const LoaderParams* pParams) {
+    SDLGameObject::load(pParams); // Carga propiedades comunes
+    m_state = PlayerState::IDLE; // Estado inicial
+    setAnimation(3, 1); // Fila 3: Idle (1 cuadro)
+}
 
 void Player::draw(SDL_Renderer* pRenderer)
 {

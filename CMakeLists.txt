@@ -29,6 +29,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SDL3_image)
 
+# tinyXML
+
+add_subdirectory(extern/tinyxml)
+
 # 1. Definir la librería del motor (con tus archivos de lógica)
 add_library(BGEngineLib 
     STATIC 
@@ -37,9 +41,14 @@ add_library(BGEngineLib
         src/TextureManager.cpp
         src/Player.cpp
         src/SDLGameObject.cpp
+        src/GameObjectFactory.cpp
+        src/LevelParser.cpp
+        src/ObjectLayer.cpp
+        src/TileLayer.cpp
+        src/Level.cpp
         ) 
 target_include_directories(BGEngineLib PUBLIC include)
-target_link_libraries(BGEngineLib PUBLIC SDL3::SDL3 SDL3_image::SDL3_image)
+target_link_libraries(BGEngineLib PUBLIC SDL3::SDL3 SDL3_image::SDL3_image tinyxml)
 
 # 2. El ejecutable principal ahora es solo un "wrapper"
 add_executable(BGEngine src/main.cpp)

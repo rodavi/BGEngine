@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Engine.hpp"
+#include "GameObjectFactory.hpp"
 #include "Player.hpp"
+#include "LevelParser.hpp"
 
 Engine::Engine() : m_pWindow(nullptr), m_pRenderer(nullptr), m_bIsRunning(false) 
 {
@@ -35,16 +37,22 @@ bool Engine::init(const char* title, int width, int height)
         return false;
     }
 
-    m_bIsRunning = true;
-
     // Inicialización de texturas u otros recursos puede ir aquí (Fase 3)
     if(!TheTextureManager::Instance()->load("assets/AnimatedAstronout.png", "astronaut", m_pRenderer)) { // Ejemplo de carga de textura [6]
         std::cerr << "Error al cargar la textura: " << SDL_GetError() << std::endl;
         return false;
     }
-    LoaderParams params = LoaderParams(100, 100, 64, 64, "astronaut", 8); // Parámetros para el jugador (ID, x, y, width, height, numFrames)
-    m_gameObjectManager.addEntity(new Player(&params)); // Agrega un jugador al manager
+    TheGameObjectFactory::Instance()->registerType("Player", new PlayerCreator()); 
 
+    // 4. Carga del nivel inicial usando LevelParser
+    LevelParser levelParser;
+    m_pLevel = levelParser.parseLevel("assets/map1.tmx", m_pRenderer); // Carga el nivel y le pasa el renderer para que pueda cargar texturas [7]
+
+    if (m_pLevel == nullptr) {
+        return false;
+    }
+
+    m_bIsRunning = true;
     return true;
 }
 

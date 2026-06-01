@@ -78,3 +78,29 @@ void TextureManager::clearFromTextureMap(std::string id) {
         m_textureMap.erase(it);
     }
 }
+
+void TextureManager::drawTile(std::string id, int margin, int spacing, 
+                              int x, int y, int width, int height, 
+                              int currentRow, int currentFrame, 
+                              SDL_Renderer* pRenderer) 
+{
+    SDL_FRect srcRect;
+    SDL_FRect destRect;
+
+    // Cálculo del área a copiar del tileset (Source) [1]
+    // Se suma el margen inicial y el desplazamiento por (tamaño + espacio)
+    srcRect.x = (float)(margin + (spacing + width) * currentFrame);
+    srcRect.y = (float)(margin + (spacing + height) * currentRow);
+    srcRect.w = (float)width;
+    srcRect.h = (float)height;
+
+    // Cálculo del área de destino en la pantalla (Destination) [1]
+    destRect.x = (float)x;
+    destRect.y = (float)y;
+    destRect.w = (float)width;
+    destRect.h = (float)height;
+
+    // En SDL3, SDL_RenderCopyEx se renombra a SDL_RenderTextureRotated [2]
+    // m_textureMap es el std::map que almacena tus SDL_Texture*
+    SDL_RenderTextureRotated(pRenderer, m_textureMap[id], &srcRect, &destRect, 0.0, nullptr, SDL_FLIP_NONE);
+}

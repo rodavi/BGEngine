@@ -8,6 +8,7 @@
 
 class GameObject {
 public:
+    virtual void load(const LoaderParams* pParams) = 0; // Carga propiedades desde LoaderParams [1]
     virtual void draw(SDL_Renderer* pRenderer)=0;
     virtual void update(double dt)=0;
     virtual void render(double alpha)=0;
@@ -20,7 +21,7 @@ public:
     virtual ~GameObject() {} 
 
 protected:
-    GameObject(const LoaderParams* pParams) : m_id(pParams->getTextureID()), m_isDead(false) {}
+    GameObject(){}
 
 private:
     // Atributos del objeto

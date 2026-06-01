@@ -7,7 +7,8 @@
 
 class SDLGameObject : public GameObject {
 public:
-    SDLGameObject(const LoaderParams* pParams);
+    SDLGameObject();
+    void load(const LoaderParams* pParams) override;
     void draw(SDL_Renderer* pRenderer) override;
     void update(double dt) override;
     void render(double alpha) override;

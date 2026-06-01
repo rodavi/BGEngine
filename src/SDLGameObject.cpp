@@ -1,9 +1,12 @@
 #include "SDLGameObject.hpp"
 #include <iostream>
 
-SDLGameObject::SDLGameObject(const LoaderParams* pParams) : 
-GameObject(pParams)
-{
+SDLGameObject::SDLGameObject() : 
+GameObject()
+{}
+
+void SDLGameObject::load(const LoaderParams* pParams) {
+    // Carga de propiedades desde LoaderParams
     m_position = Vector2D{pParams->getX(), pParams->getY()};
     m_velocity = Vector2D{0, 0};
     m_acceleration = Vector2D{0, 0};
@@ -14,6 +17,7 @@ GameObject(pParams)
     m_numFrames = pParams->getNumFrames();
     m_textureID = pParams->getTextureID();
 }
+
 
 void SDLGameObject::draw(SDL_Renderer* pRenderer) {
     // SDL3 usa float para m_position para mayor suavidad
